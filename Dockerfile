@@ -1,11 +1,11 @@
 FROM ubuntu:trusty
 MAINTAINER Thomas Léveil <thomasleveil@gmail.com>
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+RUN apt-get update \
     && apt-get install -y software-properties-common python-software-properties \
     && add-apt-repository -y ppa:ubuntu-wine/ppa
     
-RUN DEBIAN_FRONTEND=noninteractive dpkg --add-architecture i386 \
+RUN dpkg --add-architecture i386 \
     && apt-get update \
     && apt-get install -y wine1.7 winetricks xvfb
 
@@ -18,10 +18,6 @@ RUN apt-get install --no-install-recommends -y \
 RUN mkdir -p /home/steam/steamcmd  && \
     curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -v -C /home/steam/steamcmd -zx && \
     chown -R steam:steam /home/steam
-
-# Clean up when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 USER steam
 
