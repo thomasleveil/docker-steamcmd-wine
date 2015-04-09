@@ -1,24 +1,13 @@
 FROM ubuntu:trusty
 MAINTAINER Thomas Léveil <thomasleveil@gmail.com>
 
-
-## setup APT
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse' /etc/apt/sources.list
-RUN apt-get update
-ENV DEBIAN_FRONTEND noninteractive
-
-## Install dependencies
-RUN apt-get install -y software-properties-common python-software-properties
-
-## Wine
-RUN add-apt-repository -y ppa:ubuntu-wine/ppa
-RUN dpkg --add-architecture i386
-RUN apt-get update
-RUN apt-get install -y wine1.7 
-RUN apt-get install -y winetricks xvfb
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    && apt-get install -y software-properties-common python-software-properties \
+    && add-apt-repository -y ppa:ubuntu-wine/ppa
+    
+RUN DEBIAN_FRONTEND=noninteractive dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get install -y wine1.7 winetricks xvfb
 
 ## SteamCMD
 RUN useradd --home-dir /home/steam --create-home steam
